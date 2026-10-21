@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Dabbetha Demo - ضبّطها",
+    "slug": "dabbetha-uae-demo",
+    "version": "1.0.0",
+    "scheme": "dabbetha",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#102A43"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ae.dabbetha.demo"
+    },
+    "android": {
+      "package": "ae.dabbetha.demo",
+      "adaptiveIcon": {
+        "backgroundColor": "#102A43",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
