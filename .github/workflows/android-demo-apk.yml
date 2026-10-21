@@ -43,10 +43,10 @@ jobs:
 
       - name: Install Android SDK components
         run: |
-          sdkmanager --channel=3 --install \
+          sdkmanager --install \
             "platform-tools" \
-            "platforms;android-37" \
-            "build-tools;37.0.0" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
             "ndk;27.1.12297006"
 
       - name: Install JavaScript dependencies
@@ -61,6 +61,21 @@ jobs:
       - name: Generate Android project
         run: npx expo prebuild --platform android --no-install
 
+      - name: Use stable Android SDK API
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          build_file = Path("android/build.gradle")
+          contents = build_file.read_text()
+          marker = 'apply plugin: "expo-root-project"'
+          if contents.count(marker) != 1:
+              raise SystemExit(f"Expected one {marker!r} in {build_file}")
+
+          overrides = 'ext.compileSdkVersion = 36\next.buildToolsVersion = "36.0.0"\n\n'
+          build_file.write_text(contents.replace(marker, overrides + marker, 1))
+          PY
+
       - name: Build standalone APK
         run: ./android/gradlew --no-daemon -p android assembleRelease
 
@@ -68,7 +83,7 @@ jobs:
         run: |
           apk="android/app/build/outputs/apk/release/app-release.apk"
           test -s "$apk"
-          "$ANDROID_HOME/build-tools/37.0.0/aapt" dump badging "$apk" \
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$apk" \
             | grep -F "package: name='ae.dabbetha.demo'"
           sha256sum "$apk"
 
